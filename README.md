@@ -1,2 +1,5 @@
-# shiny-broccoli
-CraftyPanda 🐼 is a playful yet powerful CLI tool that helps you craft, scaffold, and automate project setups with ease. From Django apps to Docker files, CraftyPanda builds everything you need to start coding in no time!
+# CraftyPanda 🐼
+A playful and powerful project scaffolding tool.
+
+## Overview
+CraftyPanda is a CLI tool designed to help developers quickly scaffold and generate project templates for various frameworks, including Django, Golang, machine learning models, and more. With CraftyPanda, you can easily set up your project structure, Dockerfiles, environment files, Taskfiles, and other essential configurations – all customized to your preferences.

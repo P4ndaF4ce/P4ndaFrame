@@ -1,0 +1,33 @@
+version: '3'
+
+tasks:
+  build:
+    desc: "Build the CraftyPanda CLI tool"
+    cmds:
+      - go build -o craftypanda
+    silent: false
+
+  run:
+    desc: "Run the CraftyPanda CLI tool"
+    cmds:
+      - ./craftypanda --help
+    silent: false
+
+  test:
+    desc: "Run tests for CraftyPanda"
+    cmds:
+      - go test ./...
+    silent: false
+
+  clean:
+    desc: "Clean up generated files and build artifacts"
+    cmds:
+      - rm -f craftypanda
+      - rm -rf generated-project
+    silent: false
+
+  help:
+    desc: "Display help for available tasks"
+    cmds:
+      - task --list
+    silent: true

@@ -1,4 +1,17 @@
+# Taskfile.yml
+
 version: '3'
+
+vars:
+  ProjectName:
+    description: "The name of the project"
+    default: "my_project"
+  DBVersion:
+    description: "The version of the database"
+    default: "mysql:8"
+  SecretKey:
+    description: "The secret key for the project"
+    default: "defaultsecret"
 
 tasks:
   build:
@@ -8,9 +21,15 @@ tasks:
     silent: false
 
   run:
-    desc: "Run the CraftyPanda CLI tool"
+    desc: "Run the CraftyPanda CLI tool with Cobra and Viper"
     cmds:
-      - ./craftypanda --help
+      - ./craftypanda generate --name {{.ProjectName}} --db {{.DBVersion}} --secret {{.SecretKey}}
+    silent: false
+
+  generate:
+    desc: "Generate project files dynamically using text/template"
+    cmds:
+      - ./craftypanda generate --name {{.ProjectName}} --db {{.DBVersion}} --secret {{.SecretKey}}
     silent: false
 
   test:
@@ -30,4 +49,4 @@ tasks:
     desc: "Display help for available tasks"
     cmds:
       - task --list
-    silent: true
+    silent: false

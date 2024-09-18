@@ -16,6 +16,7 @@ import (
 
 func init() {
 	var flagProject flags.Project
+	var flagsDatabase flags.DataBase
 
 	rootCmd.AddCommand(createCmd)
 
@@ -24,6 +25,8 @@ func init() {
 
 	createCmd.PersistentFlags().StringP("name", "n", "", "Name of project to create")
 	createCmd.MarkPersistentFlagRequired("name")
+
+	createCmd.PersistentFlags().VarP(&flagsDatabase, "database", "d", fmt.Sprintf("Database type. Allowed values: %s", strings.Join(flags.AllowedDataBaseTypes, ", ")))
 
 }
 
@@ -48,8 +51,13 @@ var createCmd = &cobra.Command{
 		}
 
 		flagProject := flags.Project(cmd.Flag("project").Value.String())
-		if flagProject != "" {
-			fmt.Println(flagProject)
+		flagDataBase := flags.DataBase(cmd.Flag("database").Value.String())
+
+		if flagProject == "django" || flagProject == "drf" {
+			if flagDataBase == "" {
+				err = fmt.Errorf("upon choosing django or drf as project, database should be chosen as well. available values are: %s", strings.Join(flags.AllowedDataBaseTypes, ", "))
+				cobra.CheckErr(err)
+			}
 		}
 	},
 }

@@ -8,10 +8,14 @@ import (
 	"log"
 	"os"
 	"strings"
+	"sync"
 
 	"github.com/54L1M/CraftyPanda/cmd/flags"
 	"github.com/54L1M/CraftyPanda/cmd/program"
+	spinner "github.com/54L1M/CraftyPanda/cmd/ui"
 	"github.com/54L1M/CraftyPanda/cmd/utils"
+	tea "github.com/charmbracelet/bubbletea"
+
 	"github.com/spf13/cobra"
 )
 
@@ -73,6 +77,26 @@ var createCmd = &cobra.Command{
 			cobra.CheckErr(err)
 		}
 		project.AbsolutePath = currentWorkingDir
+		spinner := tea.NewProgram(spinner.InitialModelNew())
+
+		// add synchronization to wait for spinner to finish
+		wg := sync.WaitGroup{}
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			if _, err := spinner.Run(); err != nil {
+				cobra.CheckErr(err)
+			}
+		}()
+
+		defer func() {
+			if r := recover(); r != nil {
+				fmt.Println("The program encountered an unexpected issue and had to exit. The error was:", r)
+				if releaseErr := spinner.ReleaseTerminal(); releaseErr != nil {
+					log.Printf("Problem releasing terminal: %v", releaseErr)
+				}
+			}
+		}()
 
 		err = project.CreateDjangoProject()
 		if err != nil {

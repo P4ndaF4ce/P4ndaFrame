@@ -51,15 +51,16 @@ func (p *Program) CreateDjangoProject() error {
 		cobra.CheckErr(err)
 	}
 
-	err = utils.CreatePyEnv(p.Name, projectPath)
-	if err != nil {
-		log.Printf("Error creating virtualenv: %s", err)
-		cobra.CheckErr(err)
-		return err
-	}
 	err = p.CreateFileFromTemplate(root, projectPath, "requirements.txt", django.RequierementsTemplate())
 	if err != nil {
 		log.Printf("Error creating requierements.txt file: %s", err)
+		cobra.CheckErr(err)
+		return err
+	}
+
+	err = utils.CreatePyEnv(p.Name, projectPath)
+	if err != nil {
+		log.Printf("Error creating virtualenv: %s", err)
 		cobra.CheckErr(err)
 		return err
 	}

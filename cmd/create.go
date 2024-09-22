@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/54L1M/CraftyPanda/cmd/flags"
+	"github.com/54L1M/CraftyPanda/cmd/program"
 	"github.com/54L1M/CraftyPanda/cmd/utils"
 	"github.com/spf13/cobra"
 )
@@ -58,6 +59,25 @@ var createCmd = &cobra.Command{
 				err = fmt.Errorf("upon choosing django or drf as project, database should be chosen as well. available values are: %s", strings.Join(flags.AllowedDataBaseTypes, ", "))
 				cobra.CheckErr(err)
 			}
+		}
+
+		project := &program.Program{
+			Name:         flagName,
+			ProjectType:  flagProject,
+			DataBaseType: flagDataBase,
+		}
+
+		currentWorkingDir, err := os.Getwd()
+		if err != nil {
+			log.Printf("could not get current working directory: %v", err)
+			cobra.CheckErr(err)
+		}
+		project.AbsolutePath = currentWorkingDir
+
+		err = project.CreateDjangoProject()
+		if err != nil {
+			log.Printf("problem creating files for project. %v", err)
+			cobra.CheckErr(err)
 		}
 	},
 }

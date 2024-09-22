@@ -9,3 +9,12 @@ func CreatePyEnv(projectName string, appDir string) error {
 
 	return nil
 }
+
+func InstallRequirements(projectName string, appDir string) error {
+	if err := ExecuteCmd("pip",
+		[]string{"install", "-r", "requirements.txt"},
+		appDir); err != nil {
+		return err
+	}
+	return nil
+}

@@ -65,5 +65,12 @@ func (p *Program) CreateDjangoProject() error {
 		return err
 	}
 
+	err = utils.InstallRequirements(p.Name, projectPath)
+	if err != nil {
+		log.Printf("Error installing requirements: %s", err)
+		cobra.CheckErr(err)
+		return err
+	}
+
 	return nil
 }

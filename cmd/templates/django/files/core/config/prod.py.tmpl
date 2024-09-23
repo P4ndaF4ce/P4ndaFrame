@@ -1,0 +1,87 @@
+from .base import *
+from .base import env
+
+environ.Env.read_env(os.path.join(ROOT_DIR, "envs/prod/django.env"))
+
+# Settings for production
+# GENERAL
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#debug
+DEBUG = True
+# https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
+SECRET_KEY = env("DJANGO_SECRET_KEY")
+# https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
+ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS")
+# DATABASES
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#databases
+# DATABASES = {"default": env.db("DATABASE_URL")}
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": env("MARIA_DB_NAME"),
+        "USER": env("MARIA_DB_USER"),
+        "PASSWORD": env("MARIA_DB_PASSWORD"),
+        "HOST": env("MARIA_DB_HOST"),
+        "PORT": env("MARIA_DB_PORT"),
+    }
+}
+
+DATABASES["default"]["ATOMIC_REQUESTS"] = True
+
+# Security
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/4.1/ref/settings/#secure-proxy-ssl-header
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+# https://docs.djangoproject.com/en/4.1/ref/settings/#secure-hsts-seconds
+SECURE_HSTS_SECONDS = 60
+
+# https://docs.djangoproject.com/en/4.1/ref/settings/#secure-hsts-include-subdomains
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+
+# https://docs.djangoproject.com/en/4.1/ref/settings/#secure-hsts-preload
+SECURE_HSTS_PRELOAD = True
+
+# https://docs.djangoproject.com/en/4.1/ref/settings/#session-cookie-httponly
+SESSION_COOKIE_HTTPONLY = True
+
+# https://docs.djangoproject.com/en/4.1/ref/settings/#session-cookie-samesite
+SESSION_COOKIE_SAMESITE = "Strict"
+
+# https://docs.djangoproject.com/en/4.1/ref/settings/#csrf-cookie-samesite
+CSRF_COOKIE_SAMESITE = "Strict"
+
+# https://docs.djangoproject.com/en/4.1/ref/settings/#secure-browser-xss-filter
+SECURE_BROWSER_XSS_FILTER = True
+
+# https://docs.djangoproject.com/en/4.1/ref/settings/#secure-content-type-nosniff
+SECURE_CONTENT_TYPE_NOSNIFF = True
+# ------------------------------------------------------------------------------
+
+# Static files
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/4.1/ref/settings/#static-root
+STATIC_ROOT = "SHOULD BE CHANGED"
+
+# https://docs.djangoproject.com/en/4.1/ref/settings/#static-url
+STATIC_URL = "/static/"
+
+# https://docs.djangoproject.com/en/4.1/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
+# STATICFILES_DIRS = [str(ROOT_DIR / "static")]
+# ------------------------------------------------------------------------------
+
+# Media files
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/4.1/ref/settings/#media-root
+MEDIA_ROOT = "SHOULD BE CHANGED"
+
+# https://docs.djangoproject.com/en/4.1/ref/settings/#media-url
+MEDIA_URL = "/media/"
+# ------------------------------------------------------------------------------
+
+# Admin
+# ------------------------------------------------------------------------------
+# Django Admin URL.
+ADMIN_URL = env("DJANGO_ADMIN_URL")
+# ------------------------------------------------------------------------------

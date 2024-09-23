@@ -1,7 +1,6 @@
 package program
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -22,12 +21,12 @@ type Program struct {
 
 const (
 	coreConfigPath = "core/config"
+	core           = "core"
 	root           = "/"
 )
 
 func (p *Program) CreateDjangoProject() error {
 	if _, err := os.Stat(p.AbsolutePath); os.IsNotExist(err) {
-		fmt.Println("in first if")
 		if err := os.MkdirAll(p.AbsolutePath, 0o754); err != nil {
 			log.Printf("Could not create directory: %v", err)
 			return err
@@ -51,9 +50,37 @@ func (p *Program) CreateDjangoProject() error {
 		cobra.CheckErr(err)
 	}
 
+	err = utils.CreateDunderInits(projectPath, coreConfigPath, core)
+	if err != nil {
+		log.Printf("Error creating __init__.py files: %s", err)
+		cobra.CheckErr(err)
+		return err
+	}
+
 	err = p.CreateFileFromTemplate(root, projectPath, "requirements.txt", django.RequierementsTemplate())
 	if err != nil {
 		log.Printf("Error creating requierements.txt file: %s", err)
+		cobra.CheckErr(err)
+		return err
+	}
+
+	err = p.CreateFileFromTemplate(coreConfigPath, projectPath, "base.py", django.BaseConfigTemplate())
+	if err != nil {
+		log.Printf("Error creating base.py file: %s", err)
+		cobra.CheckErr(err)
+		return err
+	}
+
+	err = p.CreateFileFromTemplate(coreConfigPath, projectPath, "dev.py", django.DevConfigTemplate())
+	if err != nil {
+		log.Printf("Error creating dev.py file: %s", err)
+		cobra.CheckErr(err)
+		return err
+	}
+
+	err = p.CreateFileFromTemplate(coreConfigPath, projectPath, "prod.py", django.ProdConfigTemplate())
+	if err != nil {
+		log.Printf("Error creating prod.py file: %s", err)
 		cobra.CheckErr(err)
 		return err
 	}

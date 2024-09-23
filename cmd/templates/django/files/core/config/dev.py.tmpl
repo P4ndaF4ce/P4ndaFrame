@@ -1,1 +1,40 @@
-dev
+from .base import *
+from .base import env
+
+environ.Env.read_env(os.path.join(BASE_DIR, "envs/local/django.env"))
+
+# Settings for local development
+
+# GENERAL
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#debug
+DEBUG = True
+# https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
+SECRET_KEY = env("DJANGO_SECRET_KEY")
+# https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
+ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
+
+# DATABASES
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#databases
+# DATABASES = {"default": env.db("DATABASE_URL")}
+if env("USE_MARIADB") == "yes":
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": env("MARIA_DB_NAME"),
+            "USER": env("MARIA_DB_USER"),
+            "PASSWORD": env("MARIA_DB_PASSWORD"),
+            "HOST": env("MARIA_DB_HOST"),
+            "PORT": env("MARIA_DB_PORT"),
+        }
+    }
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        }
+    }
+
+DATABASES["default"]["ATOMIC_REQUESTS"] = True

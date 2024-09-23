@@ -18,7 +18,7 @@ type model struct {
 
 func InitialModelNew() model {
 	s := spinner.New()
-	s.Spinner = spinner.Line
+	s.Spinner = spinner.Meter
 	s.Style = lipgloss.NewStyle().Foreground(lipgloss.Color("205"))
 	return model{spinner: s}
 }

@@ -7,13 +7,15 @@ vars:
   DBVersion: "mysql"
   ProjectType: "django"
 
-silent: true
+silent: false
 
 tasks:
   build:
     desc: "Build the P4ndaFrame CLI tool"
     cmds:
       - go build -o p4ndaframe
+    sources: 
+      - cmd/*
 
   run:
     deps: [build]
@@ -26,6 +28,7 @@ tasks:
     cmds:
       - rm -f p4ndaframe
       - rm -rf my_project
+      - rm -rf .task/checksum/build
 
   help:
     desc: "Display help for available tasks"

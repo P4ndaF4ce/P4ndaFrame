@@ -3,50 +3,31 @@
 version: '3'
 
 vars:
-  ProjectName:
-    description: "The name of the project"
-    default: "my_project"
-  DBVersion:
-    description: "The version of the database"
-    default: "mysql:8"
-  SecretKey:
-    description: "The secret key for the project"
-    default: "defaultsecret"
+  ProjectName: "my_project"
+  DBVersion: "mysql"
+  ProjectType: "django"
+
+silent: true
 
 tasks:
   build:
-    desc: "Build the CraftyPanda CLI tool"
+    desc: "Build the P4ndaFrame CLI tool"
     cmds:
-      - go build -o craftypanda
-    silent: false
+      - go build -o p4ndaframe
 
   run:
-    desc: "Run the CraftyPanda CLI tool with Cobra and Viper"
+    deps: [build]
+    desc: "Run the P4ndaFrame CLI tool"
     cmds:
-      - ./craftypanda generate --name {{.ProjectName}} --db {{.DBVersion}} --secret {{.SecretKey}}
-    silent: false
-
-  generate:
-    desc: "Generate project files dynamically using text/template"
-    cmds:
-      - ./craftypanda generate --name {{.ProjectName}} --db {{.DBVersion}} --secret {{.SecretKey}}
-    silent: false
-
-  test:
-    desc: "Run tests for CraftyPanda"
-    cmds:
-      - go test ./...
-    silent: false
+      - ./p4ndaframe create -n {{.ProjectName}} -d {{.DBVersion}} -p {{.ProjectType}}
 
   clean:
     desc: "Clean up generated files and build artifacts"
     cmds:
-      - rm -f craftypanda
-      - rm -rf generated-project
-    silent: false
+      - rm -f p4ndaframe
+      - rm -rf my_project
 
   help:
     desc: "Display help for available tasks"
     cmds:
       - task --list
-    silent: false

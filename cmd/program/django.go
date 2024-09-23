@@ -50,6 +50,13 @@ func (p *Program) CreateDjangoProject() error {
 		cobra.CheckErr(err)
 	}
 
+	err = p.CreateGeneralFiles(root, projectPath)
+	if err != nil {
+		log.Printf("Error creating general files: %s", err)
+		cobra.CheckErr(err)
+		return err
+	}
+
 	err = utils.CreateDunderInits(projectPath, coreConfigPath, core)
 	if err != nil {
 		log.Printf("Error creating __init__.py files: %s", err)

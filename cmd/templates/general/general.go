@@ -2,6 +2,8 @@ package general
 
 import _ "embed"
 
+var GeneralFiles = map[string][]byte{"README.md": ReadMeTemplate(), ".gitignore": GitIgnoreTemplate()}
+
 //go:embed files/README.md.tmpl
 var readMeTemplate []byte
 

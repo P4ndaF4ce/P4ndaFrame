@@ -5,8 +5,6 @@ import (
 	"os"
 	"path/filepath"
 	"text/template"
-
-	"github.com/54L1M/CraftyPanda/cmd/templates/general"
 )
 
 func (p *Program) CreatePath(pathToCreate string, projectPath string) error {
@@ -39,21 +37,13 @@ func (p *Program) CreateFileFromTemplate(pathToCreate string, projectPath string
 	return nil
 }
 
-func (p *Program) CreateGeneralFiles(pathToCreate string, projectPath string) error {
-	generalFiles := map[string][]byte{"README.md": general.ReadMeTemplate(), ".gitignore": general.GitIgnoreTemplate()}
+func (p *Program) CreateFilesFromMap(pathToCreate string, projectPath string, files map[string][]byte) error {
 
-	for fileName, fileTemplate := range generalFiles {
-		createdFile, err := os.Create(filepath.Join(projectPath, pathToCreate, fileName))
+	for fileName, fileTemplate := range files {
+		err := p.CreateFileFromTemplate(pathToCreate, projectPath, fileName, fileTemplate)
 		if err != nil {
-			return err
-		}
-		defer createdFile.Close()
-		createdTemplate := template.Must(template.New(fileName).Parse(string(fileTemplate)))
-		err = createdTemplate.Execute(createdFile, p)
-		if err != nil {
-			return err
+			return nil
 		}
 	}
-
 	return nil
 }

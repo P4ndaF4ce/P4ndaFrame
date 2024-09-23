@@ -8,6 +8,7 @@ import (
 
 	"github.com/54L1M/CraftyPanda/cmd/flags"
 	"github.com/54L1M/CraftyPanda/cmd/templates/django"
+	"github.com/54L1M/CraftyPanda/cmd/templates/general"
 	"github.com/54L1M/CraftyPanda/cmd/utils"
 	"github.com/spf13/cobra"
 )
@@ -50,7 +51,7 @@ func (p *Program) CreateDjangoProject() error {
 		cobra.CheckErr(err)
 	}
 
-	err = p.CreateGeneralFiles(root, projectPath)
+	err = p.CreateFilesFromMap(root, projectPath, general.GeneralFiles)
 	if err != nil {
 		log.Printf("Error creating general files: %s", err)
 		cobra.CheckErr(err)
@@ -64,30 +65,23 @@ func (p *Program) CreateDjangoProject() error {
 		return err
 	}
 
-	err = p.CreateFileFromTemplate(root, projectPath, "requirements.txt", django.RequierementsTemplate())
+	err = p.CreateFilesFromMap(root, projectPath, django.RootFiles)
 	if err != nil {
-		log.Printf("Error creating requierements.txt file: %s", err)
+		log.Printf("Error creating root files: %s", err)
 		cobra.CheckErr(err)
 		return err
 	}
 
-	err = p.CreateFileFromTemplate(coreConfigPath, projectPath, "base.py", django.BaseConfigTemplate())
+	err = p.CreateFilesFromMap(coreConfigPath, projectPath, django.ConfigFiles)
 	if err != nil {
-		log.Printf("Error creating base.py file: %s", err)
+		log.Printf("Error creating settings files: %s", err)
 		cobra.CheckErr(err)
 		return err
 	}
 
-	err = p.CreateFileFromTemplate(coreConfigPath, projectPath, "dev.py", django.DevConfigTemplate())
+	err = p.CreateFilesFromMap(core, projectPath, django.CoreFiles)
 	if err != nil {
-		log.Printf("Error creating dev.py file: %s", err)
-		cobra.CheckErr(err)
-		return err
-	}
-
-	err = p.CreateFileFromTemplate(coreConfigPath, projectPath, "prod.py", django.ProdConfigTemplate())
-	if err != nil {
-		log.Printf("Error creating prod.py file: %s", err)
+		log.Printf("Error creating core files: %s", err)
 		cobra.CheckErr(err)
 		return err
 	}

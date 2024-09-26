@@ -34,3 +34,9 @@ tasks:
     desc: "Display help for available tasks"
     cmds:
       - task --list
+    silent: true
+
+  default:
+    desc: "The task that runs when a command is not specified"
+    cmds:
+      - task: help

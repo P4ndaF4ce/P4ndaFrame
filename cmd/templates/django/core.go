@@ -10,6 +10,9 @@ var CoreFiles = map[string][]byte{"asgi.py": AsgiTemplate(), "wsgi.py": WsgiTemp
 
 var RootFiles = map[string][]byte{"requirements.txt": RequierementsTemplate(), "manage.py": ManagePyTemplate()}
 
+var DjangoTemplateFiles = map[string][]byte{"base.html": BaseTemplate(), "footer.html": FooterTemplate(), "scripts.html": ScriptsTemplate(),
+	"head.html": HeadTemplate()}
+
 //go:embed files/core/config/base.py.tmpl
 var baseConfigTemplate []byte
 
@@ -33,6 +36,18 @@ var managePyTemplate []byte
 
 //go:embed files/requirements.txt.tmpl
 var requierementsTemplate []byte
+
+//go:embed files/templates/base/base.html.tmpl
+var baseTemplate []byte
+
+//go:embed files/templates/base/head.html.tmpl
+var headTemplate []byte
+
+//go:embed files/templates/base/footer.html.tmpl
+var footerTemplate []byte
+
+//go:embed files/templates/base/scripts.html.tmpl
+var scriptsTemplate []byte
 
 func BaseConfigTemplate() []byte {
 	return baseConfigTemplate
@@ -64,4 +79,17 @@ func RequierementsTemplate() []byte {
 
 func ManagePyTemplate() []byte {
 	return managePyTemplate
+}
+
+func BaseTemplate() []byte {
+	return baseTemplate
+}
+func HeadTemplate() []byte {
+	return headTemplate
+}
+func FooterTemplate() []byte {
+	return footerTemplate
+}
+func ScriptsTemplate() []byte {
+	return scriptsTemplate
 }

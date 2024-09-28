@@ -24,6 +24,7 @@ const (
 	coreConfigPath = "core/config"
 	core           = "core"
 	root           = "/"
+	templatesBase  = "templates/base"
 )
 
 func (p *Program) CreateDjangoProject() error {
@@ -49,6 +50,19 @@ func (p *Program) CreateDjangoProject() error {
 	if err != nil {
 		log.Printf("Error creating path: %s", projectPath)
 		cobra.CheckErr(err)
+	}
+
+	err = p.CreatePath(templatesBase, projectPath)
+	if err != nil {
+		log.Printf("Error creating path: %s", projectPath)
+		cobra.CheckErr(err)
+	}
+
+	err = p.CreateFilesFromMap(templatesBase, projectPath, django.DjangoTemplateFiles)
+	if err != nil {
+		log.Printf("Error creating general files: %s", err)
+		cobra.CheckErr(err)
+		return err
 	}
 
 	err = p.CreateFilesFromMap(root, projectPath, general.GeneralFiles)
